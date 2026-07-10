@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const bgMusic = document.getElementById('bgMusic');
 
   // Set the target date/time: July 11, 2026, 00:00:00 (Bangkok Time offset +07:00)
-  const targetDate = new Date('2026-07-10T20:16:00+07:00');
+  const targetDate = new Date('2026-07-11T00:00:00+07:00');
   let isTransitioned = false;
   let isMusicPlaying = false;
 
