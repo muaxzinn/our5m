@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our 5 Months</title>
+  <style>
+    /* Reset & Base System */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      color: #FFFFFF;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Sukhumvit Set", "Thonburi", "Noto Sans Thai", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Scroll Engine */
+    .scroll-container {
+      width: 100%;
+      height: 100dvh;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      เข้ามา -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .scroll-container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    section {
+      width: 100%;
+      height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .content-wrapper {
+      max-width: 700px;
+      width: 100%;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Typography & Hierarchy */
+    p {
+      font-size: 1.15rem;
+      line-height: 2;
+      font-weight: 300;
+      color: #BDBDBD;
+      margin: 0.5rem 0;
+      letter-spacing: 0.03em;
+    }
+
+    p.highlight {
+      color: #FFFFFF;
+      font-weight: 400;
+      font-size: 1.25rem;
+    }
+
+    .kaomoji {
+      font-size: 1.5rem;
+      color: #777777;
+      margin-bottom: 1.5rem;
+      font-family: monospace;
+      letter-spacing: 0.05em;
+      user-select: none;
+    }
+
+    .decoration {
+      font-size: 1.5rem;
+      color: #777777;
+      margin-bottom: 2rem;
+      user-select: none;
+    }
+
+    /* English Quotes */
+    .quote-eng {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 1.4rem;
+      color: #FFFFFF;
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .quote-divider {
+      width: 30px;
+      height: 1px;
+      background-color: #777777;
+      margin: 1.5rem 0;
+    }
+
+    /* Scroll Cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 3rem;
+      font-size: 0.8rem;
+      color: #777777;
+      letter-spacing: 0.1em;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .active .scroll-cue {
+      opacity: 0.5;
+      transform: translateY(0);
+    }
+
+    /* Ending Section Special */
+    .ending-section {
+      cursor: pointer;
+    }
+
+    .ending-hint {
+      font-size: 0.85rem;
+      color: #777777;
+      letter-spacing: 0.15em;
+      margin-top: 3rem;
+      user-select: none;
+    }
+
+    .active .ending-hint {
+      animation: subtlePulse 3s infinite ease-in-out;
+      animation-delay: 5s;
+    }
+
+    @keyframes subtlePulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+    }
+
+    /* Staggered Reveal Animation */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(8px);
+      transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition-delay: 0s;
+    }
+
+    .active .reveal-item {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+
+    /* Animation Delay Mappings */
+    .active .reveal-item:nth-child(1) {
+      transition-delay: 0.2s;
+    }
+
+    .active .reveal-item:nth-child(2) {
+      transition-delay: 0.8s;
+    }
+
+    .active .reveal-item:nth-child(3) {
+      transition-delay: 1.4s;
+    }
+
+    .active .reveal-item:nth-child(4) {
+      transition-delay: 2.0s;
+    }
+
+    .active .reveal-item:nth-child(5) {
+      transition-delay: 2.6s;
+    }
+
+    .active .reveal-item:nth-child(6) {
+      transition-delay: 3.2s;
+    }
+
+    .active .reveal-item:nth-child(7) {
+      transition-delay: 3.8s;
+    }
+
+    .active .reveal-item:nth-child(8) {
+      transition-delay: 4.4s;
+    }
+
+    .active .reveal-item:nth-child(9) {
+      transition-delay: 5.0s;
+    }
+
+    .active .reveal-item:nth-child(10) {
+      transition-delay: 5.6s;
+    }
+
+    .active .reveal-item:nth-child(11) {
+      transition-delay: 6.2s;
+    }
+
+    /* Scene-Specific Overrides for Quote Pauses */
+    #scene-10.active .reveal-item:nth-child(5) {
+      transition-delay: 3.5s;
+    }
+
+    #scene-10.active .reveal-item:nth-child(6) {
+      transition-delay: 4.1s;
+    }
+
+    #scene-10.active .reveal-item:nth-child(7) {
+      transition-delay: 4.7s;
+    }
+
+    #scene-10.active .reveal-item:nth-child(8) {
+      transition-delay: 5.3s;
+    }
+
+    #scene-11.active .reveal-item:nth-child(6) {
+      transition-delay: 4.1s;
+    }
+
+    #scene-11.active .reveal-item:nth-child(7) {
+      transition-delay: 4.7s;
+    }
+
+    #scene-11.active .reveal-item:nth-child(8) {
+      transition-delay: 5.3s;
+    }
+
+    #scene-11.active .reveal-item:nth-child(9) {
+      transition-delay: 5.9s;
+    }
+
+    /* Scroll Cue Delay Mappings */
+    #scene-01.active .scroll-cue {
+      transition-delay: 1.5s;
+    }
+
+    #scene-02.active .scroll-cue {
+      transition-delay: 3.5s;
+    }
+
+    #scene-03.active .scroll-cue {
+      transition-delay: 6.5s;
+    }
+
+    #scene-04.active .scroll-cue {
+      transition-delay: 5.2s;
+    }
+
+    #scene-05.active .scroll-cue {
+      transition-delay: 5.8s;
+    }
+
+    #scene-06.active .scroll-cue {
+      transition-delay: 2.8s;
+    }
+
+    #scene-07.active .scroll-cue {
+      transition-delay: 4.6s;
+    }
+
+    #scene-08.active .scroll-cue {
+      transition-delay: 2.5s;
+    }
+
+    #scene-09.active .scroll-cue {
+      transition-delay: 4.0s;
+    }
+
+    #scene-10.active .scroll-cue {
+      transition-delay: 6.2s;
+    }
+
+    #scene-11.active .scroll-cue {
+      transition-delay: 6.8s;
+    }
+
+    #scene-12.active .scroll-cue {
+      transition-delay: 6.5s;
+    }
+
+    #scene-13.active .scroll-cue {
+      transition-delay: 3.5s;
+    }
+
+    /* Eternal Screen Overlay */
+    .eternal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .eternal-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .eternal-heart {
+      font-size: 3rem;
+      color: #777777;
+      animation: eternalPulse 4s infinite ease-in-out;
+      user-select: none;
+    }
+
+    @keyframes eternalPulse {
+
+      0%,
+      100% {
+        opacity: 0.2;
+        transform: scale(0.95);
+        filter: blur(2px);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+        filter: blur(0px);
+      }
+    }
+
+    /* Accessibility: Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal-item {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+
+      .scroll-cue {
+        transition: none !important;
+        opacity: 0.5 !important;
+        transform: none !important;
+      }
+
+      .ending-hint {
+        animation: none !important;
+        opacity: 0.5 !important;
+      }
+
+      .eternal-heart {
+        animation: none !important;
+        opacity: 0.5 !important;
+      }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      html {
+        font-size: 14px;
+      }
+
+      section {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      html {
+        font-size: 13px;
+      }
+
+      p {
+        line-height: 1.8;
+        margin: 0.4rem 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="scroll-container" id="scrollContainer">
+    <!-- Scene 01 -->
+    <section id="scene-01">
+      <div class="content-wrapper">
+        <p class="reveal-item highlight">อ่านข้อความนี้จนจบนะ</p>
+      </div>
+      <div class="scroll-cue">↓ เลื่อนลง</div>
+    </section>
+
+    <!-- Scene 02 -->
+    <section id="scene-02">
+      <div class="content-wrapper">
+        <div class="kaomoji reveal-item">૮₍˶╥︿╥˶₎า</div>
+        <p class="reveal-item highlight">เค้าขอโทษนะ</p>
+        <p class="reveal-item">ก่อนที่เว็บนี้จะพาแฟนไปดูอะไรต่อ</p>
+        <p class="reveal-item">เค้าอยากใช้พื้นที่ตรงนี้</p>
+        <p class="reveal-item">พูดในสิ่งที่เค้าคิดมาตลอดหลายวัน</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 03 -->
+    <section id="scene-03">
+      <div class="content-wrapper">
+        <p class="reveal-item">ช่วงนี้เป็นช่วงกีฬาสีแหละ</p>
+        <p class="reveal-item">ทุกวันหลังเลิกเรียน</p>
+        <p class="reveal-item">แฟนต้องอยู่ช่วยทำป้าย</p>
+        <p class="reveal-item">ช่วยเตรียมงาน</p>
+        <p class="reveal-item">ช่วยหลายอย่างจนแทบไม่มีเวลาได้พัก</p>
+        <p class="reveal-item highlight">เค้ารู้ว่าแฟนเหนื่อย</p>
+        <p class="reveal-item">แล้วก็รู้ว่า</p>
+        <p class="reveal-item">ตลอดเกือบสองอาทิตย์ที่ผ่านมา</p>
+        <p class="reveal-item">แฟนพยายามทำหน้าที่ของตัวเองอย่างเต็มที่</p>
+        <p class="reveal-item highlight">เค้ารู้ทุกอย่างแหละ</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 04 -->
+    <section id="scene-04">
+      <div class="content-wrapper">
+        <div class="kaomoji reveal-item">(っ◞‸◟ c)</div>
+        <p class="reveal-item">แต่ในเวลาเดียวกัน</p>
+        <p class="reveal-item highlight">เค้าก็ยังคิดถึงแฟนมาก</p>
+        <p class="reveal-item">บางวันเค้ารอข้อความจากแฟน</p>
+        <p class="reveal-item">บางวันเค้ารอแค่ได้คุยกันไม่กี่นาที</p>
+        <p class="reveal-item">แค่ได้รู้ว่าวันนี้แฟนเป็นยังไง</p>
+        <p class="reveal-item">สำหรับเค้า</p>
+        <p class="reveal-item highlight">แค่นั้นก็เพียงพอแล้ว</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 05 -->
+    <section id="scene-05">
+      <div class="content-wrapper">
+        <p class="reveal-item">แต่เมื่อเวลาที่รอนานขึ้น</p>
+        <p class="reveal-item highlight">ความคิดถึง</p>
+        <p class="reveal-item highlight">กลับกลายเป็นความน้อยใจ</p>
+        <p class="reveal-item">และเค้าก็นอนก่อนตลอดเลย นอนเร็วด้วย</p>
+        <p class="reveal-item">เค้าเผลอคิดไปเองว่า</p>
+        <p class="reveal-item">แฟนกำลังละเลยเค้า</p>
+        <p class="reveal-item">ทั้งที่ความจริงแล้ว</p>
+        <p class="reveal-item highlight">แฟนไม่ได้ละเลยเลย</p>
+        <p class="reveal-item">แฟนแค่กำลังเหนื่อย</p>
+        <p class="reveal-item">และกำลังทำในสิ่งที่แฟนต้องรับผิดชอบ</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 06 -->
+    <section id="scene-06">
+      <div class="content-wrapper">
+        <p class="reveal-item">เค้าเพิ่งรู้ตัวเหมือนกันว่า</p>
+        <p class="reveal-item">บางครั้ง</p>
+        <p class="reveal-item highlight">เค้าเอาความคิดถึง</p>
+        <p class="reveal-item highlight">ไปสร้างความกดดันให้แฟนโดยไม่รู้ตัว</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 07 -->
+    <section id="scene-07">
+      <div class="content-wrapper">
+        <div class="kaomoji reveal-item">૮₍˶╥︿╥˶₎า</div>
+        <p class="reveal-item highlight">เค้าขอโทษนะ</p>
+        <p class="reveal-item">เค้าไม่ได้อยากให้แฟนรู้สึกว่าต้องแบ่งเวลาทุกนาทีมาเอาใจเค้า</p>
+        <p class="reveal-item highlight">เค้าแค่อยากอยู่ข้าง ๆ แฟน</p>
+        <p class="reveal-item">ในวันที่แฟนเหนื่อย</p>
+        <p class="reveal-item">ในวันที่แฟนยิ้ม</p>
+        <p class="reveal-item">รวมถึงในวันที่เรางอนกันแบบนี้</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 08 -->
+    <section id="scene-08">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">♡</div>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 09 -->
+    <section id="scene-09">
+      <div class="content-wrapper">
+        <p class="reveal-item highlight">วันนี้เป็นวันครบรอบ 5 เดือนของเรา</p>
+        <p class="reveal-item">เค้าไม่อยากให้วันสำคัญวันนี้</p>
+        <p class="reveal-item">จบลงด้วยความเงียบ</p>
+        <p class="reveal-item highlight">เพราะตลอด 5 เดือนที่ผ่านมา</p>
+        <p class="reveal-item">มันมีค่ามากเกินกว่าจะปล่อยให้ความเข้าใจผิด</p>
+        <p class="reveal-item">กลายเป็นสิ่งที่เราจดจำ</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 10 -->
+    <section id="scene-10">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">✦</div>
+        <p class="quote-eng reveal-item">Every story is beautiful,</p>
+        <p class="quote-eng reveal-item">but ours is my favorite.</p>
+        <div class="quote-divider reveal-item"></div>
+        <p class="reveal-item">ทุกเรื่องราวล้วนสวยงาม</p>
+        <p class="reveal-item">แต่เรื่องราวของเรา</p>
+        <p class="reveal-item highlight">คือเรื่องที่เค้าอยากอ่านซ้ำ</p>
+        <p class="reveal-item highlight">และอยากเขียนต่อไปเรื่อย ๆ</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 11 -->
+    <section id="scene-11">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">✦</div>
+        <p class="quote-eng reveal-item">We come to love</p>
+        <p class="quote-eng reveal-item">not by finding a perfect person,</p>
+        <p class="quote-eng reveal-item">but by learning to see an imperfect person perfectly.</p>
+        <div class="quote-divider reveal-item"></div>
+        <p class="reveal-item">เราไม่ได้รักกัน</p>
+        <p class="reveal-item">เพราะเราเป็นคนที่สมบูรณ์แบบ</p>
+        <p class="reveal-item highlight">แต่เราเรียนรู้ที่จะรัก</p>
+        <p class="reveal-item highlight">และยอมรับข้อบกพร่องของกันและกัน</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 12 -->
+    <section id="scene-12">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">♡</div>
+        <p class="reveal-item">เค้าเองก็ไม่ได้เป็นแฟนที่สมบูรณ์แบบ</p>
+        <p class="reveal-item">บางครั้งเค้างอแง</p>
+        <p class="reveal-item">บางครั้งเค้าน้อยใจ</p>
+        <p class="reveal-item">บางครั้งเค้าก็ทำให้แฟนเหนื่อยใจ</p>
+        <p class="reveal-item highlight">แต่ถึงอย่างนั้น</p>
+        <p class="reveal-item highlight">เค้าก็ยังอยากเป็นคนที่ดีขึ้น</p>
+        <p class="reveal-item">ไม่ใช่เพราะเค้าถูกบังคับ</p>
+        <p class="reveal-item">แต่ที่เค้าอยากทำให้</p>
+        <p class="reveal-item highlight">ก็เพื่อแฟน</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 13 -->
+    <section id="scene-13">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">𐙚</div>
+        <p class="reveal-item highlight">ขอบคุณนะ</p>
+        <p class="reveal-item">ที่เข้ามาเป็นรอยยิ้มของเค้า</p>
+        <p class="reveal-item">ขอบคุณที่เลือกเดินมาด้วยกัน</p>
+        <p class="reveal-item highlight">และขอบคุณที่ยังอยู่ตรงนี้</p>
+      </div>
+      <div class="scroll-cue">เลื่อนลงเพื่ออ่านต่อ</div>
+    </section>
+
+    <!-- Scene 14 -->
+    <section id="scene-14" class="ending-section">
+      <div class="content-wrapper">
+        <div class="decoration reveal-item">୨ৎ</div>
+        <p class="reveal-item highlight">สุขสันต์วันครบรอบ 5 เดือนนะคนเก่ง</p>
+        <p class="reveal-item">เค้าหวังว่า</p>
+        <p class="reveal-item">หลังจากวันนี้</p>
+        <p class="reveal-item highlight">เราจะกลับมายิ้มให้กันอีกครั้ง</p>
+        <p class="reveal-item">แล้วจับมือไปด้วยกันต่อเรื่อยๆนะ</p>
+        <p class="reveal-item highlight">รักนะคับแฟนคนเก่งของเค้า ❤️</p>
+        <div class="ending-hint reveal-item">แตะหน้าจอเพื่อส่งท้าย</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Eternal Screen Overlay -->
+  <div class="eternal-overlay" id="eternalOverlay">
+    <div class="eternal-heart">♡</div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('section');
+      const scrollContainer = document.getElementById('scrollContainer');
+      const endingSection = document.getElementById('scene-14');
+      const eternalOverlay = document.getElementById('eternalOverlay');
+      let isTransitioned = false;
+
+      // Intersection Observer for Active States
+      const observerOptions = {
+        root: scrollContainer,
+        rootMargin: '0px',
+        threshold: 0.6
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          } else {
+            entry.target.classList.remove('active');
+          }
+        });
+      }, observerOptions);
+
+      sections.forEach(section => {
+        observer.observe(section);
+      });
+
+      // Ending Section Click Interaction (Fade to Black & Pulsing Heart)
+      endingSection.addEventListener('click', () => {
+        if (endingSection.classList.contains('active') && !isTransitioned) {
+          isTransitioned = true;
+
+          // Disable scrolling
+          scrollContainer.style.overflowY = 'hidden';
+
+          // Show eternal screen
+          eternalOverlay.classList.add('visible');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
