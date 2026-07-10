@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Set the target date/time: July 11, 2026, 00:00:00 local time
   // (Month index 6 is July. This constructor works on all browsers including iOS Safari)
-  const targetDate = new Date(2026, 6, 11, 4, 30, 0);
+  const targetDate = new Date(2026, 6, 11, 5, 0, 0);
   let isTransitioned = false;
   let isMusicPlaying = false;
   let clockOffset = 0; // Offset between server time and local system time
