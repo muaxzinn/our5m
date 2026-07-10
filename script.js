@@ -7,10 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const lockTimer = document.getElementById('lockTimer');
   const bgMusic = document.getElementById('bgMusic');
 
-  // Set the target date/time: July 11, 2026, 00:00:00 (Bangkok Time offset +07:00)
-  const targetDate = new Date('2026-07-11T00:00:00+07:00');
+  // Set the target date/time: July 11, 2026, 00:00:00 local time
+  // (Month index 6 is July. This constructor works on all browsers including iOS Safari)
+  const targetDate = new Date(2026, 6, 11, 0, 0, 0);
   let isTransitioned = false;
   let isMusicPlaying = false;
+  let clockOffset = 0; // Offset between server time and local system time
+  let isTimeSynced = false;
 
   // --- 1. Intersection Observer for Active States ---
   const observerOptions = {
@@ -74,22 +77,53 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', startMusic, { passive: true });
   }
 
-  // --- 4. Countdown & Lock Screen Logic ---
+  // --- 4. Sync Time with Server (Hybrid Clock) ---
+  async function syncTimeWithServer() {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 1500); // 1.5s timeout
+
+    const startTime = performance.now();
+    try {
+      // Fetch headers only of the current page to get the server clock Date header
+      const response = await fetch(window.location.href, {
+        method: 'HEAD',
+        cache: 'no-cache',
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const serverDateStr = response.headers.get('Date');
+      if (serverDateStr) {
+        const latency = (performance.now() - startTime) / 2;
+        const serverTime = new Date(serverDateStr).getTime() + latency;
+        clockOffset = serverTime - Date.now();
+        isTimeSynced = true;
+        console.log(`[Time Sync] Success. Clock Offset: ${clockOffset}ms (Latency: ${latency.toFixed(1)}ms)`);
+      }
+    } catch (error) {
+      clearTimeout(timeoutId);
+      console.warn('[Time Sync] Failed or timed out. Falling back to local device clock:', error);
+    }
+  }
+
+  // --- 5. Countdown & Lock Screen Logic ---
   let countdownInterval;
 
   function updateCountdown() {
-    const now = new Date();
+    // Calculate current time factoring in the server clock offset
+    const now = new Date(Date.now() + clockOffset);
     const timeLeft = targetDate - now;
 
-    if (timeLeft <= 0) {
-      // Unlocked!
+    if (isNaN(timeLeft) || timeLeft <= 0) {
+      // Unlocked! (Or safety fallback if date parsing failed)
       clearInterval(countdownInterval);
       unlockSite();
     } else {
-      // Locked - Update timer
-      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      // Locked - Update timer (using Option 1: Native Date object methods, Math.ceil to prevent 1-second lag)
+      const diffDate = new Date(Math.ceil(timeLeft / 1000) * 1000);
+      const hours = diffDate.getUTCHours();
+      const minutes = diffDate.getUTCMinutes();
+      const seconds = diffDate.getUTCSeconds();
 
       const formattedHours = String(hours).padStart(2, '0');
       const formattedMinutes = String(minutes).padStart(2, '0');
@@ -110,15 +144,20 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMusicTriggers();
   }
 
-  // Initial check
+  // Start server clock synchronization asynchronously
+  syncTimeWithServer();
+
+  // Initial check based on current local clock (will update when sync completes)
   const now = new Date();
-  if (targetDate - now > 0) {
+  const initialTimeLeft = targetDate - now;
+  if (!isNaN(initialTimeLeft) && initialTimeLeft > 0) {
     // Lock the site
     scrollContainer.classList.add('locked');
     updateCountdown();
-    countdownInterval = setInterval(updateCountdown, 1000);
+    // Update every 200ms for high synchronization with the clock
+    countdownInterval = setInterval(updateCountdown, 200);
   } else {
-    // Already unlocked
+    // Already unlocked (or invalid date fallback)
     unlockSite();
   }
 });
